@@ -20,6 +20,7 @@ export function ViewDeckPage() {
     const [cardToEdit, setCardToEdit] = useState<Card | undefined>(undefined);
     const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
     const [cardToDelete, setCardToDelete] = useState<Card | undefined>(undefined);
+    const [showDeleteDeckModal, setShowDeleteDeckModal] = useState(false);
     const TOTAL_CARDS_TO_DISPLAY = 10;
 
     useEffect(() => {
@@ -112,6 +113,19 @@ export function ViewDeckPage() {
                             }
                         }
                         }/>
+                    <ConfirmModal open={showDeleteDeckModal}
+                                  title="Delete Deck"
+                                  message="Are you sure you want to delete this deck?"
+                                  submitLabel="Delete"
+                                  isSubmittingLabel="Deleting..."
+                                  onClose={() => setShowDeleteDeckModal(false)}
+                                  onConfirm={async () => {
+                                      if (deckId) {
+                                          await dataStore.deleteDeck(deckId);
+                                          setShowDeleteDeckModal(false);
+                                          navigate('/')
+                                      }
+                                  }}/>
                 </>
             )}
             <div className="flex flex-col gap-6">
@@ -177,10 +191,18 @@ export function ViewDeckPage() {
                 </div>
                 <div className="mt-6">
                     <Link to={`/decks/${deck?.id}/study`}>
-                        <button className="rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-3 py-2 text-sm font-medium shadow-sm hover:translate-y-px focus:outline-none focus:ring-2 focus:ring-slate-400/50">
+                        <button
+                            className="rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-3 py-2 text-sm font-medium shadow-sm hover:translate-y-px focus:outline-none focus:ring-2 focus:ring-slate-400/50">
                             Study
                         </button>
                     </Link>
+                </div>
+                <div className="mt-6">
+                    <button
+                        onClick={() => setShowDeleteDeckModal(true)}
+                        className="rounded-xl bg-red-500 text-white px-3 py-2 text-sm font-medium shadow-sm hover:translate-y-px focus:outline-none focus:ring-2 focus:ring-red-400/50">
+                        Delete Deck
+                    </button>
                 </div>
             </div>
         </Layout>

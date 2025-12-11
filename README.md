@@ -18,6 +18,10 @@ I wanted something that is simple and without ads or tracking.
 
 ---
 
+## Demo
+
+A live demo is available at https://barabara.megafarad.com.
+
 
 ## Features
 

@@ -1,7 +1,8 @@
 import type {DataStore} from "./dataStore.ts";
 import type {Card, Deck} from "./model.ts";
+import {exampleData} from "./exampleData.ts";
 
-interface StoreType {
+export interface StoreType {
     decks: Deck[];
     cards: Card[];
 }
@@ -13,7 +14,13 @@ export class LocalDataStore implements DataStore {
     }
 
     private deserializeAndReturnStore(): StoreType {
-        return JSON.parse(localStorage.getItem("flashcards") ?? "{\"decks\": [], \"cards\": []}");
+        const store = localStorage.getItem("flashcards");
+        if (!store) {
+            localStorage.setItem("flashcards", JSON.stringify(exampleData));
+            return exampleData;
+        } else {
+            return JSON.parse(store) as StoreType;
+        }
     }
 
     async deleteCard(id: string): Promise<void> {
