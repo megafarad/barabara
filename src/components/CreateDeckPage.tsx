@@ -20,8 +20,9 @@ export function CreateDeckPage() {
 
     return (
         <Layout active="create" onNavigate={(href) => navigate(href)}>
-            <div className="flex items-center justify-between">
-                <h1 className="text-xl font-semibold">Create Deck</h1>
+            <div className="mb-8">
+                <h1 className="text-3xl font-semibold tracking-tight text-black mb-2">Create New Deck</h1>
+                <p className="text-[15px] text-black/50">Add a new deck to your collection</p>
             </div>
             <CreateDeckForm onSubmit={createDeck} submitLabel="Create Deck"/>
         </Layout>

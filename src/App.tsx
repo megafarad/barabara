@@ -4,6 +4,8 @@ import {DashboardPage} from "./components/DashboardPage.tsx";
 import {CreateDeckPage} from "./components/CreateDeckPage.tsx";
 import {ViewDeckPage} from "./components/ViewDeckPage.tsx";
 import {StudyPage} from "./components/StudyPage.tsx";
+import Home from "./components/Home.tsx";
+
 
 function App() {
 
@@ -11,7 +13,9 @@ function App() {
         <DataProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<DashboardPage/>}/>
+                    <Route path="/" element={<Home />}/>
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/create-deck" element={<CreateDeckPage/>}/>
                     <Route path="/decks/:deckId" element={<ViewDeckPage/>}/>
                     <Route path="/decks/:deckId/study" element={<StudyPage/>}/>
