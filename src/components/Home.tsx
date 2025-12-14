@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
 const Home = () => {
@@ -41,13 +41,13 @@ const Home = () => {
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)`,
           backgroundSize: "40px 40px"
         }} />
-        
+
         {/* Gradient Orbs */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-0 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl bg-blue-500/10" style={{ animation: "float 20s ease-in-out infinite" }} />
           <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl bg-violet-500/10" style={{ animation: "float 25s ease-in-out infinite reverse" }} />
         </div>
-        
+
         <div className="relative z-10 max-w-6xl mx-auto px-8 pt-32 pb-24 text-center">
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border backdrop-blur-xl mb-12 bg-zinc-900/5 border-zinc-900/10">
             <span className="relative flex h-2 w-2">
@@ -115,13 +115,13 @@ const Home = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { 
-                title: "Proven Spaced Repetition", 
+              {
+                title: "Proven Spaced Repetition",
                 desc: "Cards are scheduled using a simple, research-backed repetition system that prioritizes long-term retention.",
                 img: "https://images.unsplash.com/photo-1701523600650-007b393ed2fe?q=80"
               },
-              { 
-                title: "Complete Privacy", 
+              {
+                title: "Complete Privacy",
                 desc: "Zero data collection. Your data never leaves your device.",
                 img: "https://images.unsplash.com/photo-1561474381-7a7ebb152e2c?q=80"
               },
@@ -131,26 +131,26 @@ const Home = () => {
                 img: "https://images.unsplash.com/photo-1683322499436-f4383dd59f5a?q=80"
             }
             ,
-              { 
-                title: "Open Architecture", 
+              {
+                title: "Open Architecture",
                 desc: "Self-host, modify, or extend. Complete source access",
                 img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80"
               },
-              { 
-                title: "Instant Performance", 
+              {
+                title: "Instant Performance",
                 desc: "Sub-100ms response times. Built for speed",
                 img: "https://images.unsplash.com/photo-1762217975790-f919d61f7f92?q=80"
               },
-              { 
-                title: "Refined Interface", 
+              {
+                title: "Refined Interface",
                 desc: "Meticulously designed for distraction-free learning",
                 img: "https://images.unsplash.com/photo-1633471908928-7ae447bbad7a?q=80"
               }
             ].map((feature, i) => (
               <div key={i} className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] bg-white">
                 <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={feature.img} 
+                  <img
+                    src={feature.img}
                     alt={feature.title}
                     className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110 opacity-90"
                   />
@@ -176,18 +176,18 @@ const Home = () => {
 
           <div className="space-y-32">
             {[
-              { 
-                title: "Create Collections", 
+              {
+                title: "Create Collections",
                 desc: "Organize knowledge with precision. Tag, categorize, and structure your learning path",
                 img: "https://images.unsplash.com/photo-1728570136593-073b7b661742?q=80"
               },
-              { 
-                title: "Intelligent Reviews", 
+              {
+                title: "Intelligent Reviews",
                 desc: "Cards appear exactly when needed. Our algorithm maximizes retention efficiency",
                 img: "https://images.unsplash.com/photo-1717062010902-ff2a4671b34d?q=80"
               },
-              { 
-                title: "Track Progress", 
+              {
+                title: "Track Progress",
                 desc: "Beautiful analytics reveal your learning patterns and mastery metrics",
                 img: "https://images.unsplash.com/photo-1676911809746-85d90edbbe4a?q=80"
               }
@@ -201,7 +201,7 @@ const Home = () => {
                 <div className="flex-1 space-y-6">
                   <h3 className="text-4xl font-light tracking-tight">{item.title}</h3>
                   <p className="text-lg leading-relaxed text-zinc-600">{item.desc}</p>
-                  
+
                 </div>
               </div>
             ))}
@@ -211,7 +211,7 @@ const Home = () => {
 
       {/* Testimonials */}
       <section className="py-32 bg-indigo-50">
-        
+
         <div className="max-w-7xl mx-auto px-8">
             <h2 className="text-4xl sm:text-5xl font-light tracking-tight text-center mb-20">
                 On learning & memory
@@ -258,9 +258,9 @@ const Home = () => {
 
       {/* CTA */}
       <section className="py-40 text-center">
-        
+
         <div className="max-w-4xl mx-auto px-8">
-            
+
           <h2 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight leading-[0.9] mb-8">
             Begin your
             <br />
