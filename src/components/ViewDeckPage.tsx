@@ -1,15 +1,19 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router";
 import type {Card, Deck} from "../data/model.ts";
 import Layout from "./Layout.tsx";
 import {dataStore} from "../data/localDataStore.ts";
 import {CardModal} from "./CardModal.tsx";
 import {ConfirmModal} from "./ConfirmModal.tsx";
+import {useDataStore} from "../context/DataContext.tsx";
 
 export function ViewDeckPage() {
     const {deckId} = useParams();
     const navigate = useNavigate();
     const [deck, setDeck] = useState<Deck | undefined>(undefined);
+    const {decks: allDecks, setDecks: setAllDecks} = useDataStore()
+    const [isRenamingDeck, setIsRenamingDeck] = useState(false);
+    const [deckNameDraft, setDeckNameDraft] = useState('');
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
     const [deckCards, setDeckCards] = useState<Card[]>([]);
     const [loading, setLoading] = useState(false);
@@ -19,6 +23,7 @@ export function ViewDeckPage() {
     const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
     const [cardToDelete, setCardToDelete] = useState<Card | undefined>(undefined);
     const [showDeleteDeckModal, setShowDeleteDeckModal] = useState(false);
+    const deckNameInputRef = useRef<HTMLInputElement>(null);
     const TOTAL_CARDS_TO_DISPLAY = 12;
 
     useEffect(() => {
@@ -39,6 +44,55 @@ export function ViewDeckPage() {
             mounted = false;
         }
     }, [deckId]);
+
+    useEffect(() => {
+        if (!isRenamingDeck) return;
+        const id = window.setTimeout(() => {
+            deckNameInputRef.current?.focus();
+            deckNameInputRef.current?.select();
+        }, 0);
+        return () => window.clearTimeout(id);
+    }, [isRenamingDeck]);
+
+    const beginRename = () => {
+        if (!deck) return;
+        setDeckNameDraft(deck.name);
+        setIsRenamingDeck(true);
+    };
+
+    const cancelRename = () => {
+        setIsRenamingDeck(false);
+        setDeckNameDraft("");
+    };
+
+    const saveRename = async () => {
+        if (!deck) return;
+
+        const nextName = deckNameDraft.trim();
+        if (nextName.length === 0) {
+            cancelRename();
+            return;
+        }
+        if (nextName === deck.name) {
+            cancelRename();
+            return;
+        }
+
+        // Call into your persistence layer.
+        // You may need to add this method if it doesn't exist yet.
+        await dataStore.upsertDeck({
+            ...deck,
+            name: nextName
+        })
+
+        setDeck((prev) => (prev ? {...prev, name: nextName} : prev));
+
+        const allUpdatedDecks = allDecks.map(deckToUpdate => deckToUpdate.id === deck.id ? {...deckToUpdate, name: nextName} : deckToUpdate);
+        setAllDecks(allUpdatedDecks);
+
+        cancelRename();
+    };
+
 
     const totalPages = Math.ceil(deckCards.length / TOTAL_CARDS_TO_DISPLAY);
     const isLastPage = totalPages === currentPageNumber;
@@ -118,7 +172,7 @@ export function ViewDeckPage() {
                             }
                         }}
                     />
-                    <ConfirmModal 
+                    <ConfirmModal
                         open={showDeleteDeckModal}
                         title="Delete Collection"
                         message="Are you sure you want to delete this collection? All cards will be permanently removed."
@@ -147,7 +201,29 @@ export function ViewDeckPage() {
                                 </svg>
                                 <span className="text-xs tracking-wider uppercase font-medium">Collection</span>
                             </div>
-                            <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-3">{deck?.name}</h1>
+                            {!isRenamingDeck ? (
+                                <h1
+                                    className="text-4xl sm:text-5xl font-light tracking-tight mb-3 cursor-text"
+                                    title="Click to rename"
+                                    onDoubleClick={beginRename}
+                                    onClick={beginRename}
+                                >
+                                    {deck?.name}
+                                </h1>
+                            ) : (
+                                <input
+                                    ref={deckNameInputRef}
+                                    value={deckNameDraft}
+                                    onChange={(e) => setDeckNameDraft(e.target.value)}
+                                    onBlur={() => void saveRename()}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") void saveRename();
+                                        if (e.key === "Escape") cancelRename();
+                                    }}
+                                    className="text-4xl sm:text-5xl font-light tracking-tight mb-3 w-full bg-transparent outline-none border-b border-zinc-900/20 focus:border-zinc-900/50"
+                                    aria-label="Deck name"
+                                />
+                            )}
                             <p className="text-base text-zinc-600">{deckCards.length} {deckCards.length === 1 ? 'card' : 'cards'} • Ready to master</p>
                         </div>
                         <div className="flex gap-3">
@@ -175,7 +251,7 @@ export function ViewDeckPage() {
 
                 {/* Action Bar */}
                 <div className="flex items-center justify-between mb-8">
-                    <button 
+                    <button
                         onClick={() => setShowCreateCardModal(true)}
                         className="group px-6 py-3 rounded-full border-2 border-dashed border-zinc-900/20 backdrop-blur-xl bg-white/60 text-zinc-900 text-sm font-medium hover:border-zinc-900/40 hover:bg-white/80 transition-all hover:scale-105 flex items-center gap-2 shadow-lg"
                     >
@@ -296,11 +372,11 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
                 >
                     <div className="relative h-full rounded-3xl p-6 flex flex-col backdrop-blur-2xl bg-white/80 border border-zinc-900/10 shadow-xl transition-all duration-150 group-hover:scale-[1.02] group-hover:shadow-2xl overflow-hidden will-change-transform">
                         {/* Glossy overlay - instant */}
-                        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/60 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-120 pointer-events-none will-change-opacity" />
-                        
+                        <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-white/60 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-120 pointer-events-none will-change-opacity" />
+
                         {/* Shimmer - faster */}
                         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-200 will-change-transform" />
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-200 will-change-transform" />
                         </div>
 
                         <div className="relative flex items-start justify-between mb-4 z-10">
@@ -359,11 +435,11 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
                 >
                     <div className="relative h-full rounded-3xl p-6 flex flex-col backdrop-blur-2xl bg-white/80 border border-zinc-900/10 shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl overflow-hidden">
                         {/* Glossy overlay */}
-                        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/60 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                        
+                        <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-white/60 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
                         {/* Shimmer */}
                         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-300" />
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-300" />
                         </div>
 
                         <div className="relative flex items-start justify-between mb-4 z-10">
