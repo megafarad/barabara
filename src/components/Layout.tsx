@@ -76,8 +76,8 @@ export default function Layout({
 
           <div className="flex items-center gap-3">
             <a
-              href="/"
-              onClick={(e) => handleNavClick(e, "/", "dashboard")}
+              href="/dashboard"
+              onClick={(e) => handleNavClick(e, "/dashboard", "dashboard")}
               className="text-sm px-4 py-2 rounded-full tracking-wide text-zinc-600 hover:text-zinc-900 hover:bg-zinc-900/5 transition-all"
             >
               Dashboard

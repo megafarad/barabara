@@ -64,12 +64,12 @@ const Home = () => {
           </h1>
 
           <p className="text-lg sm:text-xl leading-relaxed mb-14 max-w-2xl mx-auto text-zinc-600">
-            A sophisticated flashcard platform built on spaced repetition science.
+              A focused flashcard platform built on spaced repetition science.
             <br />Private, elegant, and impossibly effective.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-            <Link to="/" className="group px-9 py-4 rounded-full text-sm tracking-wide font-medium bg-zinc-900 text-white hover:bg-zinc-800 transition-all duration-300 hover:scale-105">
+            <Link to="/dashboard" className="group px-9 py-4 rounded-full text-sm tracking-wide font-medium bg-zinc-900 text-white hover:bg-zinc-800 transition-all duration-300 hover:scale-105">
               <span className="flex items-center gap-2">
                 Start Learning
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,22 +118,23 @@ const Home = () => {
               { 
                 title: "Proven Spaced Repetition", 
                 desc: "Cards are scheduled using a simple, research-backed repetition system that prioritizes long-term retention.",
-                img: "https://images.unsplash.com/photo-1701523600650-007b393ed2fe?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                img: "https://images.unsplash.com/photo-1701523600650-007b393ed2fe?q=80"
               },
               { 
                 title: "Complete Privacy", 
-                desc: "Zero data collection. Everything stays encrypted on your device",
-                img: "https://images.unsplash.com/photo-1561474381-7a7ebb152e2c?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                desc: "Zero data collection. Your data never leaves your device.",
+                img: "https://images.unsplash.com/photo-1561474381-7a7ebb152e2c?q=80"
               },
-              { 
-                title: "Offline-First", 
-                desc: "Full functionality without internet. Sync when you're ready",
-                img: "https://images.unsplash.com/photo-1681770678332-3a190df72091?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              },
+             {
+                title: "Browser-Only",
+                desc: "Fully client-side. No servers, accounts, or network dependencies.",
+                img: "https://images.unsplash.com/photo-1683322499436-f4383dd59f5a?q=80"
+            }
+            ,
               { 
                 title: "Open Architecture", 
                 desc: "Self-host, modify, or extend. Complete source access",
-                img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80"
               },
               { 
                 title: "Instant Performance", 
@@ -266,7 +267,7 @@ const Home = () => {
             <span className="font-extralight italic text-zinc-600">learning journey</span>
           </h2>
           <p className="text-lg mb-12 text-zinc-600">No registration required. Start immediately.</p>
-          <Link to="/" className="inline-flex items-center gap-3 px-10 py-5 rounded-full text-base tracking-wide font-medium bg-zinc-900 text-white hover:bg-zinc-800 transition-all duration-300 hover:scale-105">
+          <Link to="/dashboard" className="inline-flex items-center gap-3 px-10 py-5 rounded-full text-base tracking-wide font-medium bg-zinc-900 text-white hover:bg-zinc-800 transition-all duration-300 hover:scale-105">
             Launch BaraBara
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
