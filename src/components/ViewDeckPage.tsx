@@ -202,14 +202,38 @@ export function ViewDeckPage() {
                                 <span className="text-xs tracking-wider uppercase font-medium">Collection</span>
                             </div>
                             {!isRenamingDeck ? (
-                                <h1
-                                    className="text-4xl sm:text-5xl font-light tracking-tight mb-3 cursor-text"
-                                    title="Click to rename"
-                                    onDoubleClick={beginRename}
-                                    onClick={beginRename}
-                                >
-                                    {deck?.name}
-                                </h1>
+                                <div className="flex items-center gap-2">
+                                    <h1
+                                        className="text-4xl sm:text-5xl font-light tracking-tight cursor-text"
+                                        onClick={beginRename}
+                                    >
+                                        {deck?.name}
+                                    </h1>
+
+                                    <button
+                                        type="button"
+                                        onClick={beginRename}
+                                        aria-label="Rename deck"
+                                        className="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-zinc-900/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 transition"
+                                        title="Rename"
+                                    >
+                                        {/* Pencil icon (inline SVG) */}
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path
+                                                d="M12 20h9"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                            />
+                                            <path
+                                                d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
                             ) : (
                                 <input
                                     ref={deckNameInputRef}
