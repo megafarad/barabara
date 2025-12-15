@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 import type { Card } from "../data/model.ts";
 import { dataStore } from "../data/localDataStore.ts";
 import { DateTime } from "luxon";
@@ -155,7 +157,7 @@ export function StudyPage() {
                 isDark ? "bg-white/10" : "bg-zinc-900/10"
               }`}>
                 <div
-                  className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-700"
+                  className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-700"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -177,8 +179,8 @@ export function StudyPage() {
               ${isFlipping ? "scale-[0.97] opacity-60" : "scale-100"}
             `}>
               {/* Glossy Overlay Effect */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent pointer-events-none" />
-              
+              <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-white/40 via-white/10 to-transparent pointer-events-none" />
+
               {phase === "front" && (
                 <>
                   <div className="relative">
@@ -188,13 +190,13 @@ export function StudyPage() {
                       Question
                     </span>
                   </div>
-                  
+
                   <div className="relative flex-1 flex items-center justify-center py-8">
-                    <p className="text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-center leading-relaxed">
-                      {currentCard.front}
+                    <p className="prose lg:prose-xl text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-center leading-relaxed">
+                      <MDEditor.Markdown source={currentCard.front} rehypePlugins={[rehypeSanitize]}/>
                     </p>
                   </div>
-                  
+
                   <button
                     onClick={handleFlip}
                     className={`relative mt-8 w-full py-4 rounded-xl text-sm tracking-wide font-semibold transition-all hover:scale-105 shadow-xl ${
@@ -217,13 +219,13 @@ export function StudyPage() {
                       Answer
                     </span>
                   </div>
-                  
+
                   <div className="relative flex-1 flex items-center justify-center py-8">
-                    <p className="text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-center leading-relaxed">
-                      {currentCard.back}
+                    <p className="prose lg:prose-xl text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-center leading-relaxed">
+                      <MDEditor.Markdown source={currentCard.back} rehypePlugins={[rehypeSanitize]}/>
                     </p>
                   </div>
-                  
+
                   <div className="relative grid grid-cols-2 gap-4 mt-8">
                     <button
                       onClick={iForgotIt}

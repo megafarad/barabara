@@ -1,5 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 import type {Card, Deck} from "../data/model.ts";
 import Layout from "./Layout.tsx";
 import {dataStore} from "../data/localDataStore.ts";
@@ -438,7 +440,7 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
 
                         <div className="relative flex-1 flex items-center justify-center px-2 z-10">
                             <p className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
-                                {card.front}
+                                <MDEditor.Markdown source={card.front} rehypePlugins={[rehypeSanitize]}/>
                             </p>
                         </div>
 
@@ -501,7 +503,7 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
 
                         <div className="relative flex-1 flex items-center justify-center px-2 z-10">
                             <p className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
-                                {card.back}
+                                <MDEditor.Markdown source={card.back} rehypePlugins={[rehypeSanitize]}/>
                             </p>
                         </div>
 
