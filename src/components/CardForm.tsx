@@ -1,7 +1,11 @@
-import {type CardInput, CardInputSchema} from "../schemas/cardInput.ts";
-import {useForm} from "react-hook-form";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SubmitButton} from "./SubmitButton.tsx";
+import {type CardInput, CardInputSchema} from "../schemas/cardInput.ts";
 
 export interface CardFormProps {
     initial?: Partial<CardInput>;
@@ -11,7 +15,7 @@ export interface CardFormProps {
 }
 
 export default function CardForm({initial, onSubmit, submittingText = "Creating...", submitLabel = "Create Card"}: CardFormProps) {
-    const {handleSubmit, register, formState: {isSubmitting}} =
+    const {control, handleSubmit, formState: {isSubmitting}} =
         useForm<CardInput>({resolver: zodResolver(CardInputSchema)});
 
     const formSubmit = handleSubmit(onSubmit);
@@ -22,24 +26,45 @@ export default function CardForm({initial, onSubmit, submittingText = "Creating.
                 <label htmlFor="front" className="block text-sm font-medium pb-4">
                     Front of Card
                 </label>
-                <textarea
-                    rows={4}
-                    defaultValue={initial?.front}
-                    className="border rounded px-2 py-1 w-full"
-                    {...register('front')}
-                />
+                <div className='prose lg:prose-xl'>
+                    <Controller
+                        name='front'
+                        control={control}
+                        defaultValue={initial?.front}
+                        render={({field: {onChange, value}}) => (
+                            <MDEditor
+                                id='front'
+                                value={value}
+                                onChange={onChange}
+                                previewOptions={{
+                                    rehypePlugins: [[rehypeSanitize]]
+                                }}
+                            />
+                        )}
+                    />
+                </div>
             </div>
             <div>
                 <label htmlFor="back" className="block text-sm font-medium pb-4">
                     Back of Card
                 </label>
-                <textarea
-                    rows={4}
-                    defaultValue={initial?.back}
-                    className="border rounded px-2 py-1 w-full"
-                    {...register('back')}
-                />
-
+                <div className="prose lg:prose-xl">
+                    <Controller
+                        name='back'
+                        control={control}
+                        defaultValue={initial?.back}
+                        render={({field: {onChange, value}}) => (
+                            <MDEditor
+                                id='back'
+                                value={value}
+                                onChange={onChange}
+                                previewOptions={{
+                                    rehypePlugins: [[rehypeSanitize]]
+                                }}
+                            />
+                        )}
+                    />
+                </div>
             </div>
             <div className="pt-4">
                 <SubmitButton isSubmitting={isSubmitting} text={submitLabel} submittingText={submittingText}/>
