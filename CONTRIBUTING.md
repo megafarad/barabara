@@ -53,8 +53,8 @@ Big features (accounts, multi-user, org management, full-blown sync, etc.) are *
 
    ```bash
    git clone https://github.com/megafarad/barabara.git
-   cd <repo-name>
-````
+   cd barabara
+    ````
 
 2. **Install dependencies**:
 
@@ -119,7 +119,11 @@ To keep things sane:
 
    * For anything non-trivial, please open an issue or comment on an existing one before doing a lot of work.
 
-3. **Code style**
+3. **Always create a new branch**
+
+   * This makes it easier to keep your fork up-to-date with the main repo.
+
+4. **Code style**
 
    * Use TypeScript where possible.
    * Keep components small and focused.

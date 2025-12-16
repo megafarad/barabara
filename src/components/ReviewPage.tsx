@@ -7,14 +7,18 @@ import { dataStore } from "../data/localDataStore.ts";
 import { DateTime } from "luxon";
 import Layout from "./Layout.tsx";
 
-export type StudyPagePhase = "front" | "back";
+export type ReviewPagePhase = "front" | "back";
 
-export function StudyPage() {
+export interface ReviewPageProps {
+  studyMode: boolean;
+}
+
+export function ReviewPage({studyMode}: ReviewPageProps) {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [studyCards, setStudyCards] = useState<Card[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [phase, setPhase] = useState<StudyPagePhase>("front");
+  const [phase, setPhase] = useState<ReviewPagePhase>("front");
   const [isFlipping, setIsFlipping] = useState(false);
   const [theme] = useState("light");
   const isDark = theme === "dark";
@@ -22,10 +26,14 @@ export function StudyPage() {
   const getCardsDueForReview = useCallback(async () => {
     if (!deckId) return [];
     const cards = await dataStore.getCards(deckId);
-    return cards.filter(
-      (card) => DateTime.fromISO(card.nextReviewAt).diffNow("days").days <= 0
-    );
-  }, [deckId]);
+    if (studyMode) {
+      return cards.filter(
+          (card) => DateTime.fromISO(card.nextReviewAt).diffNow("days").days <= 0
+      );
+    } else {
+      return cards;
+    }
+  }, [deckId, studyMode]);
 
   useEffect(() => {
     getCardsDueForReview().then(setStudyCards);
@@ -79,6 +87,11 @@ export function StudyPage() {
     setCurrentCardIndex((p) => p + 1);
   };
 
+  const reviewNextCard = () => {
+    setPhase("front");
+    setCurrentCardIndex((p) => p + 1);
+  }
+
   return (
     <Layout active={deckId} onNavigate={(href) => navigate(href)}>
       {/* Animated Blurred Background */}
@@ -90,9 +103,9 @@ export function StudyPage() {
 
       <div className="max-w-3xl mx-auto relative z-10">
         {/* Header */}
-        <div className="mb-12">
+        {studyMode && (<div className="mb-12">
           <div className={`inline-flex items-center gap-2 px-5 py-2 rounded-full border backdrop-blur-xl mb-8 shadow-lg ${
-            isDark ? "bg-white/5 border-white/10" : "bg-white/60 border-zinc-900/10"
+              isDark ? "bg-white/5 border-white/10" : "bg-white/60 border-zinc-900/10"
           }`}>
             <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
             <span className="text-xs tracking-wider uppercase font-medium">Focus Mode</span>
@@ -104,7 +117,16 @@ export function StudyPage() {
           <p className={`text-base sm:text-lg ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
             One card at a time. Stay present, stay focused.
           </p>
-        </div>
+        </div>)}
+
+        {!studyMode && (<div className="mb-12">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">
+            Review Session
+          </h1>
+          <p className={`text-base sm:text-lg ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+            Review all cards in the deck.
+          </p>
+        </div>)}
 
         {/* Empty State - All Done */}
         {!currentCard && (
@@ -226,34 +248,54 @@ export function StudyPage() {
                     </p>
                   </div>
 
-                  <div className="relative grid grid-cols-2 gap-4 mt-8">
-                    <button
-                      onClick={iForgotIt}
-                      className={`
+                  {studyMode && (
+                      <div className="relative grid grid-cols-2 gap-4 mt-8">
+                        <button
+                            onClick={iForgotIt}
+                            className={`
                         py-4 rounded-xl text-sm tracking-wide font-semibold
                         border backdrop-blur-xl transition-all hover:scale-105 shadow-lg
                         ${isDark
-                          ? "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20"
-                          : "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                        }
+                                ? "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20"
+                                : "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                            }
                       `}
-                    >
-                      Forgot
-                    </button>
-                    <button
-                      onClick={iKnewIt}
-                      className={`
+                        >
+                          Forgot
+                        </button>
+                        <button
+                            onClick={iKnewIt}
+                            className={`
                         py-4 rounded-xl text-sm tracking-wide font-semibold
                         transition-all hover:scale-105 shadow-lg
                         ${isDark
-                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                          : "bg-emerald-600 text-white hover:bg-emerald-700"
-                        }
+                                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                : "bg-emerald-600 text-white hover:bg-emerald-700"
+                            }
                       `}
-                    >
-                      Got It
-                    </button>
-                  </div>
+                        >
+                          Got It
+                        </button>
+                      </div>
+                  )}
+                  {!studyMode && (
+                      <div className="relative grid grid-cols-1 gap-4 mt-8">
+                        <button
+                            onClick={reviewNextCard}
+                            className={`
+                        py-4 rounded-xl text-sm tracking-wide font-semibold
+                        transition-all hover:scale-105 shadow-lg
+                        ${isDark
+                                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                : "bg-emerald-600 text-white hover:bg-emerald-700"
+                            }
+                      `}
+                        >
+                          Next Card
+                        </button>
+
+                      </div>
+                  )}
                 </>
               )}
             </div>

@@ -253,6 +253,11 @@ export function ViewDeckPage() {
                             <p className="text-base text-zinc-600">{deckCards.length} {deckCards.length === 1 ? 'card' : 'cards'} • Ready to master</p>
                         </div>
                         <div className="flex gap-3">
+                            <Link to={`/decks/${deck?.id}/review`}>
+                                <button className="px-6 py-3 rounded-full border backdrop-blur-xl border-zinc-900/20 text-zinc-900 text-sm font-medium hover:bg-zinc-900/5 transition-all hover:scale-105 shadow-xl">
+                                    Review
+                                </button>
+                            </Link>
                             <Link to={`/decks/${deck?.id}/study`}>
                                 <button className="group px-6 py-3 rounded-full bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-800 transition-all hover:scale-105 shadow-xl flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
