@@ -110,6 +110,10 @@ export function ViewDeckPage() {
         setCurrentPageNumber((prev) => prev + 1);
     }
 
+    const goToLastPage = () => {
+        setCurrentPageNumber(totalPages);
+    }
+
     const start = (currentPageNumber - 1) * TOTAL_CARDS_TO_DISPLAY;
     const end = currentPageNumber * TOTAL_CARDS_TO_DISPLAY;
     const displayedCards = deckCards.slice(start, end);
@@ -130,11 +134,8 @@ export function ViewDeckPage() {
                         open={showCreateCardModal}
                         onClose={() => setShowCreateCardModal(false)}
                         onCreated={(createdCard) => {
-                            const goForward = displayedCards.length === TOTAL_CARDS_TO_DISPLAY;
                             setDeckCards((existingCards) => [...existingCards, createdCard]);
-                            if (goForward) {
-                                setCurrentPageNumber((prev) => prev + 1);
-                            }
+                            goToLastPage();
                         }}
                     />
                     <CardModal
@@ -444,9 +445,9 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
                         </div>
 
                         <div className="relative flex-1 flex items-center justify-center px-2 z-10">
-                            <p className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
+                            <div className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
                                 <MDEditor.Markdown source={card.front} rehypePlugins={[rehypeSanitize]}/>
-                            </p>
+                            </div>
                         </div>
 
                         <div className="relative text-center text-[11px] tracking-wide text-zinc-400 mt-3 z-10 flex items-center justify-center gap-2">
@@ -507,9 +508,9 @@ function FlipCard({card, onEdit, onDelete}: {card: Card, onEdit: () => void, onD
                         </div>
 
                         <div className="relative flex-1 flex items-center justify-center px-2 z-10">
-                            <p className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
+                            <div className="text-center text-base sm:text-lg font-light tracking-tight text-zinc-900 line-clamp-4 leading-relaxed">
                                 <MDEditor.Markdown source={card.back} rehypePlugins={[rehypeSanitize]}/>
-                            </p>
+                            </div>
                         </div>
 
                         <div className="relative text-center text-[11px] tracking-wide text-zinc-400 mt-3 z-10 flex items-center justify-center gap-2">
